@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "767354915152",
+    "project_id": "lunchx-now",
+    "storage_bucket": "lunchx-now.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767354915152:android:62fabdd0e53d82bff9c455",
+        "android_client_info": {
+          "package_name": "com.example.lunchx_order"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxMYGzKoCvl4tNFgYpUAennjuzjyeDfrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
