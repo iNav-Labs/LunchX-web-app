@@ -105,11 +105,12 @@ class _BodySectionState extends State<BodySection> {
                                 ),
                               );
                             },
-                            child: Card(
+                            child: Container(
                               margin: const EdgeInsets.all(20),
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
+                              // elevation: 0,
+                             decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(23.0),
+      border: Border.all(width: 2, color: Colors.black),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,20 +160,28 @@ class _BodySectionState extends State<BodySection> {
                                                   const BorderRadius.only(
                                                 topLeft: Radius.circular(15),
                                                 topRight: Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                                bottomRight: Radius.circular(15),
                                               ),
-                                              child: Image.network(
-                                                imagePath,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  print(
-                                                      'Error loading image: $error');
-                                                  print(
-                                                      'Image URL: $imagePath');
-                                                  return const Text(
-                                                      'Error loading image');
-                                                },
-                                              ),
+                                          child: Container(
+  margin: const EdgeInsets.only(top: 10, right: 10, left: 10), // Adjust margins as needed
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(15.0), // Adjust the radius as needed
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(15.0), // Ensure the child is clipped with the same radius as the container
+    child: Image.network(
+      imagePath,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        print('Error loading image: $error');
+        print('Image URL: $imagePath');
+        return const Text('Error loading image');
+      },
+    ),
+  ),
+)
+
                                             );
                                           } else {
                                             // If imagePath is null or empty, display a placeholder or default image
@@ -201,7 +210,7 @@ class _BodySectionState extends State<BodySection> {
                                           document['canteenName'] ?? 'N/A',
                                           style: GoogleFonts.outfit(
                                             fontSize: 18,
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                         const SizedBox(height: 8),

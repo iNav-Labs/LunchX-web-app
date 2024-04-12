@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lunchx_order/Customer/landingpage.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lunchx_order/Canteen/canteen_dashboard.dart';
-import 'package:lunchx_order/Customer/login.dart';
 import 'package:lunchx_order/Customer/student_dashboard.dart';
 
 Future<void> main() async {
@@ -73,7 +73,7 @@ class SplashScreen extends StatelessWidget {
         } else if (snapshot.data == UserRole.customer) {
           return DashboardScreen(); // Navigate to customer dashboard
         } else {
-          return Login(); // Navigate to customer login page if not a canteen or customer
+          return LandingPage(); // Navigate to customer login page if not a canteen or customer
         }
       },
     );

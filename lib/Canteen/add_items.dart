@@ -25,6 +25,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _packagepriceController = TextEditingController();
   final TextEditingController _preparetimeController = TextEditingController();
+  final TextEditingController _batchSize = TextEditingController();
   late User _currentUser; // Current user
 
   @override
@@ -122,6 +123,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
       double packageprice =
           double.tryParse(_packagepriceController.text) ?? 0.0;
       double prep_time = double.tryParse(_preparetimeController.text) ?? 0.0;
+      double batch_size = double.tryParse(_batchSize.text) ?? 0.0;
 
       // Ensure that an image is selected
       if (_imageBytes == null) {
@@ -172,6 +174,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         'packageprice': packageprice, // Add the package price here
         'canteenName': canteenName, // Include canteen name in the document
         'timeofPreparation': prep_time, // Add the time of preparation here
+        'batchSize': batch_size, // Add the batch size here
         'availability': true
       });
 
@@ -183,6 +186,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
         _priceController.clear();
         _packagepriceController.clear();
         _preparetimeController.clear();
+        _batchSize.clear();
       });
 
       // Show success message
@@ -297,6 +301,22 @@ class _AddItemScreenState extends State<AddItemScreen> {
               ],
               decoration: const InputDecoration(
                 hintText: 'Enter Time in Minutes',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            const Text(
+              'Batch Size (how many piece can be cooked at once?)',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            TextField(
+              controller: _batchSize,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly // Allow only digits
+              ],
+              decoration: const InputDecoration(
+                hintText: 'Quantity',
                 border: OutlineInputBorder(),
               ),
             ),

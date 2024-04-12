@@ -1,14 +1,11 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, unused_local_variable
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lunchx_order/Canteen/canteenlogin.dart';
 import 'package:lunchx_order/Customer/signup.dart';
 import 'package:lunchx_order/Customer/student_dashboard.dart';
-
+import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  const Login({Key? key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -24,60 +21,129 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(80.0, 50.0, 80.0, 98.0),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 50.0),
+        child: Center(
+          child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 32.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                TextField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Enter Your Registered Email ID',
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 16.0),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Enter Your Password',
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        // Toggle password visibility
-                        setState(() {
-                          _obscurePassword = !_obscurePassword;
-                        });
-                      },
-                      child: Icon(
-                        _obscurePassword
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+          Row(
+  children: [
+    Row(
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFF6552FE), // Purple color
+          ),
+        ),
+        const SizedBox(width: 8),
+        Container(
+          width: 10,
+          height: 10,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.black, // Black color
+          ),
+        ),
+        const SizedBox(width: 8),
+        Container(
+          width: 10,
+          height: 10,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.black, // Black color
+          ),
+        ),
+      ],
+    ),
+    Spacer(), // Adds space between the dots and the "Log in" text
+   Row(
+                    children: [
+                      Text(
+                        'Log',
+                        style: GoogleFonts.outfit(
+                          fontSize: 36.0,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF6552FE),
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 4.0),
+                      Text(
+                        'in',
+                        style: GoogleFonts.outfit(
+                          fontSize: 36.0,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  obscureText: _obscurePassword,
+  ],
+),
+
+
+                const SizedBox(height: 40.0),
+                Container(
+                  height: 45,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(width: 2, color: Colors.black),
+                  ),
+                  child: TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter Your Registered Email ID',
+                      border: InputBorder.none,
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
                 ),
                 const SizedBox(height: 16.0),
+                Container(
+                  height: 45,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(width: 2, color: Colors.black),
+                  ),
+                  child: TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Enter Your Password',
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        child: Icon(
+                          _obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                      ),
+                      border: InputBorder.none,
+                    ),
+                    obscureText: _obscurePassword,
+                  ),
+                ),
+                const SizedBox(height: 30.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // Navigate to sign up page
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SignUp()),
+                            builder: (context) => const SignUp(),
+                          ),
                         );
                       },
                       child: const Text(
@@ -85,60 +151,37 @@ class _LoginState extends State<Login> {
                         style: TextStyle(color: Colors.grey),
                       ),
                     ),
-                    FloatingActionButton.small(
-                      backgroundColor: Colors.black,
-                      onPressed: _isLoading ? null : () => _loginUser(context), // Disable button if loading
-                      shape: const StadiumBorder(),
-                      child: _isLoading
-                          ? SizedBox(
-      width: 20,
-      height: 20,
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-        strokeWidth: 3, // Adjust the strokeWidth as needed
-      ),
-    )
-                          : const Icon(
-                              Icons.arrow_right_alt_rounded,
-                              size: 40,
-                              color: Colors.white,
-                            ),
-                    ),
+                    FloatingActionButton(
+                      onPressed: _isLoading ? null : () => _loginUser(context),
+                     backgroundColor: Colors.black,
+                        child: _isLoading
+      ? const SizedBox(
+          width: 20,
+          height: 20,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            strokeWidth: 3,
+          ),
+        )
+      : Image.asset(
+          'assets/Arrow.png', // Provide the path to your image asset
+          width: 30,
+          height: 30,
+          color: Colors.white,
+        ),
+),
                   ],
                 ),
                 const SizedBox(height: 16.0),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Image.asset(
-                    'assets/bowl2.jpeg',
-                    fit: BoxFit.cover,
-                    height: 200.0,
-                    width: double.infinity,
-                  ),
+  'assets/bowl2.jpeg',
+  fit: BoxFit.cover,
+  height: MediaQuery.of(context).size.height / 4, // Adjust the fraction as needed
+  width:  MediaQuery.of(context).size.width /2, // Adjust the fraction as needed
+),
                 ),
-                Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Canteen Login screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CanteenLogin()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Canteen Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
               ],
             ),
           ),
@@ -149,7 +192,7 @@ class _LoginState extends State<Login> {
 
   void _loginUser(BuildContext context) async {
     setState(() {
-      _isLoading = true; // Set loading state to true when login starts
+      _isLoading = true;
     });
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -157,18 +200,15 @@ class _LoginState extends State<Login> {
         password: _passwordController.text,
       );
 
-      // If login successful, navigate to dashboard
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const DashboardScreen()),
       );
     } catch (e) {
-      // If login fails, show alert
       _showErrorDialog(context, e.toString());
-    }
-    finally {
+    } finally {
       setState(() {
-        _isLoading = false; // Set loading state to false when login finishes (success or fail)
+        _isLoading = false;
       });
     }
   }
@@ -193,4 +233,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-// Do not change in the code

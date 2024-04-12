@@ -89,6 +89,15 @@ flutter:
     - assets/image5.png
     - assets/bowl.jpeg
     - assets/bowl2.jpeg
+    - assets/Arrow.png
+    - assets/fly_burger.webp
+    - assets/mandal.png
+    - assets/right.png
+    - assets/left.png
+    - assets/white.png
+    - assets/clock_purple.jpeg
+    - assets/art.png
+    - assets/group.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -18,6 +18,8 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _canteenNameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _chefs = TextEditingController();
+
   Uint8List? _imageBytes;
 
   @override
@@ -65,6 +67,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
         _nameController.text.isNotEmpty &&
         _canteenNameController.text.isNotEmpty &&
         _phoneController.text.isNotEmpty;
+        _chefs.text.isNotEmpty;
   }
 
   void _showAlertDialog(bool saved) {
@@ -129,6 +132,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
           'name': _nameController.text,
           'canteenName': _canteenNameController.text,
           'phoneNumber': _phoneController.text,
+          'number_of_chefs':_chefs.text,
           'imagePath': imageUrl,
         });
 
@@ -139,6 +143,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
           _nameController.clear();
           _canteenNameController.clear();
           _phoneController.clear();
+          _chefs.clear();
         });
 
         _showAlertDialog(true);
@@ -201,6 +206,14 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
                   labelText: 'Phone Number',
                 ),
                 keyboardType: TextInputType.phone,
+              ),
+               const SizedBox(height: 16.0),
+              TextField(
+                controller: _chefs,
+                decoration: const InputDecoration(
+                  labelText: 'No. of Chefs / No. of tasks handeled at once (by 1 person)',
+                ),
+                keyboardType: TextInputType.number,
               ),
               const SizedBox(height: 30.0),
               ElevatedButton(

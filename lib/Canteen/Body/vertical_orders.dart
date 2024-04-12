@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, sized_box_for_whitespace, library_private_types_in_public_api
 
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,6 +26,121 @@ class _VerticalOrdersState extends State<VerticalOrders> {
     super.initState();
     fetchOrderDetails();
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Future<double> calculateOrderPreparationTime(int numberOfChefs, List<Map<String, dynamic>> menuItems, int numberOfOrders, List<Map<String, dynamic>> presentOrdersData, int orderNumber) async {
+  try {
+    List<double> orderPreparationTimes = [];
+    double etpFinal = 0;
+
+    for (var orderData in presentOrdersData) {
+      double totalOrderPrepTime = 0.0;
+      List<dynamic> cartItems = orderData['cartItems'];
+      int A = numberOfOrders;
+
+      if (A <= numberOfChefs) {
+        if (cartItems.length <= numberOfChefs) {
+          double maxPrepTime = cartItems.fold<double>(0, (prev, item) {
+            var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
+            return max(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
+          });
+          totalOrderPrepTime = maxPrepTime;
+          A--;
+        } else {
+          double maxPrepTime = cartItems.fold<double>(0, (prev, item) {
+            var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
+            return max(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
+          });
+          double minPrepTime = cartItems.fold<double>(double.infinity, (prev, item) {
+            var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
+            return min(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
+          });
+          totalOrderPrepTime = maxPrepTime + minPrepTime;
+          A--;
+        }
+      } else {
+        double maxPrepTime = cartItems.fold<double>(0, (prev, item) {
+          var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
+          return max(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
+        });
+        double minPrepTime = cartItems.fold<double>(double.infinity, (prev, item) {
+          var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
+          return min(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
+        });
+        totalOrderPrepTime = maxPrepTime + minPrepTime;
+        A--;
+      }
+
+      orderPreparationTimes.add(totalOrderPrepTime);
+    }
+
+    etpFinal = orderPreparationTimes[orderNumber-1];
+    return etpFinal;
+  } catch (e, stackTrace) {
+    // Catch any exceptions that might occur during the execution of the function
+    print('Error occurred: $e');
+    print('Stack trace: $stackTrace');
+    return 0; // You can return a default value or handle the error according to your application's requirements
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   void _refresh() {
     setState(() {
@@ -269,16 +386,7 @@ content: Column(
                                             // Action for 'Accept' button
                                             try {
                                               print(email);
-                                              // Update the status of the order to 'accept' in Firestore
-                                              await FirebaseFirestore.instance
-                                                  .collection('LunchX')
-                                                  .doc('customers')
-                                                  .collection(
-                                                      'canteen_orders_queue')
-                                                  .doc(
-                                                      'Order #${order['orderNumber']}')
-                                                  .update(
-                                                      {'accept?': 'accept'});
+
                                               // Move the order to the AcceptedOrders collection
                                               await FirebaseFirestore.instance
                                                   .collection('LunchX')
@@ -292,6 +400,12 @@ content: Column(
                                                 ...order,
                                                 'accept?': 'accept'
                                               });
+String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+                                              if (userEmail == null) {
+                                                throw Exception("User is not logged in.");
+                                              }
+                                              
                                               // Update status at customer side
                                               await FirebaseFirestore.instance
                                                   .collection('LunchX')
@@ -303,6 +417,122 @@ content: Column(
                                                       'Order #${order['orderNumber']}')
                                                   .update(
                                                       {'accept?': 'accept'});
+                                              // Calculating the estimated time of preparation
+
+                                              print('data type : ${order['orderNumber'].runtimeType}');
+                                              print('fetching number of chef');
+// Query the 'present_orders' collection
+  var presentOrdersSnapshot = await FirebaseFirestore.instance
+      .collection('LunchX')
+      .doc('canteens')
+      .collection('users')
+      .doc(userEmail)
+      .collection('AcceptedOrders')
+      .get();
+
+  // List to store all document data
+List<Map<String, dynamic>> presentOrdersData = [];
+
+// Iterate over the documents in the snapshot
+presentOrdersSnapshot.docs.forEach((doc) {
+  // Access the data of each document
+  Map<String, dynamic> data = doc.data();
+  // Add the data to the list
+  presentOrdersData.add(data);
+});
+
+  // Get the number of documents (orders) in the collection
+  int numberOfOrders = presentOrdersSnapshot.docs.length;
+
+  // Now you have the number of orders
+  print('Number of orders in present_orders collection: $numberOfOrders');
+
+                                              
+                                              // Fetch the number of chefs from the canteen database
+var chefSnapshot = await FirebaseFirestore.instance
+      .collection('LunchX')
+      .doc('canteens')
+      .collection('users')
+      .doc(userEmail)
+      .get();
+
+// Parse the 'number_of_chefs' data as an integer
+int numberOfChefs = int.tryParse(chefSnapshot.data()?['number_of_chefs'] ?? '0') ?? 0;
+
+                                                print('number of chefs : $numberOfChefs');
+                                                 print('fetching order');
+
+                                               var currentOrderSnapshot = await FirebaseFirestore.instance
+      .collection('LunchX')
+      .doc('canteens')
+      .collection('users')
+      .doc(userEmail)
+      .collection('present_orders')
+      .doc('Order #${order['orderNumber']}')
+      .get();
+
+  // Check if the document exists
+  if (!currentOrderSnapshot.exists) {
+    throw Exception("Order not found.");
+  }
+
+  // Extract order data
+  Map<String, dynamic> orderData = currentOrderSnapshot.data() as Map<String, dynamic>;
+
+  // Fetch menu items
+  var menuItemsSnapshot = await FirebaseFirestore.instance
+      .collection('LunchX')
+      .doc('canteens')
+      .collection('users')
+      .doc(userEmail)
+      .collection('items')
+      .get();
+
+  // Iterate through the menu items snapshot
+  List<Map<String, dynamic>> menuItems = menuItemsSnapshot.docs.map((doc) => doc.data()).toList();
+   print('menu Items: ${menuItems.length}');
+    print('order data : $orderData');
+     List<Map<String, dynamic>> cartItems = [];
+
+if (orderData.containsKey('cartItems')) {
+  // Check if 'cartItems' is an array before attempting to access its elements
+  if (orderData['cartItems'] is List) {
+    List<Map<String, dynamic>> cartItems = List<Map<String, dynamic>>.from(orderData['cartItems']);
+
+    // Now you have access to the cart items
+    // You can proceed with further operations
+
+    print('Number of items in cart: ${cartItems.length}');
+
+   
+  } else {
+    // Handle the case where 'cartItems' is not an array
+    print("'cartItems' is not an array.");
+  }
+}
+
+
+
+                                              
+// int numberOfChefs, List<Map<String, dynamic>> menuItems, Map<String, dynamic> orderData
+
+                                              // Calculate the estimated order preparation time
+                                              double etpOrder = await calculateOrderPreparationTime(numberOfChefs,menuItems, numberOfOrders, presentOrdersData, order['orderNumber']);
+  
+                                              // Add ETP (estimated time of preparation) to customer's profile
+                                              // Add ETP (estimated time of preparation) and time to the customer's profile
+  await FirebaseFirestore.instance
+      .collection('LunchX')
+      .doc('customers')
+      .collection('users')
+      .doc(order['email'])
+      .collection('current_orders')
+      .doc('Order #${order['orderNumber']}')
+      .update({
+    'ETP': etpOrder, // Update the existing field 'ETP' with the calculated value
+    'time': DateTime.now().toString(), // Add a new field 'time' with the current timestamp
+  });
+
 
                                               // Remove the order from the presentOrders collection
                                               await FirebaseFirestore.instance

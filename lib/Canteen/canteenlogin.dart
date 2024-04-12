@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lunchx_order/Canteen/canteen_dashboard.dart';
 import 'package:lunchx_order/Canteen/canteensignup.dart';
-import 'package:lunchx_order/Customer/login.dart';
 // import 'package:lunchx_order/Canteen/canteensignup.dart';
 
 class CanteenLogin extends StatefulWidget {
@@ -107,29 +106,7 @@ class _LoginState extends State<CanteenLogin> {
                     width: double.infinity,
                   ),
                 ),
-                Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Canteen Login screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Login()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Stundent Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
+                
               ],
             ),
           ),

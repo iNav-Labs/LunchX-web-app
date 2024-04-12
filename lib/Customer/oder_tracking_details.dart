@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderDetailsCard extends StatelessWidget {
   final double cardWidth;
+  final int time = 10;
 
   const OrderDetailsCard({super.key, required this.cardWidth});
 
@@ -476,7 +477,7 @@ class OrderDetailsCard extends StatelessWidget {
                                         const SizedBox(height: 10),
                                         Text(
                                           order['cooking']
-                                              ? "${order['time']} mins"
+                                              ? "${order['ETP']} mins"
                                               : "0 mins",
                                           style: GoogleFonts.outfit(
                                             color: Colors.white,

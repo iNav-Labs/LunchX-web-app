@@ -265,7 +265,6 @@ Future<String?> getCanteenOwnerEmail(String canteenName) async {
             'cooking': true,
             'dispatch': false,
             'ready': false,
-            'time': 4,
             'email': userEmail,
           };
 

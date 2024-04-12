@@ -107,29 +107,7 @@ class _CanteenSignUpState extends State<CanteenSignUp> {
                     width: double.infinity,
                   ),
                 ),
-                Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Canteen Login screen
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const Login()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Student Login',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
+               
               ],
             ),
           ),

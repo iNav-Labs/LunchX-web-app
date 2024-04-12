@@ -31,7 +31,7 @@ class _ItemCountWidgetState extends State<ItemCountWidget> {
   Widget build(BuildContext context) {
     return SizedBox( // Wrap with SizedBox
       width: 80, // Adjusted width to fit the content
-      height: 22,
+      height: 30,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.0),

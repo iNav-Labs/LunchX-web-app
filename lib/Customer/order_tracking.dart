@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable, library_private_types_in_public_api
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,32 +6,29 @@ import 'package:lunchx_order/Customer/oder_tracking_details.dart';
 import 'package:lunchx_order/Customer/student_dashboard.dart';
 
 class OrderTracker extends StatefulWidget {
-  const OrderTracker({super.key});
+  const OrderTracker({Key? key}) : super(key: key);
 
   @override
   _OrderTrackerState createState() => _OrderTrackerState();
 }
 
 class _OrderTrackerState extends State<OrderTracker> {
-  late Timer _timer;
+  bool _isLoading = false; // Variable to track whether data is being fetched
 
-  @override
-  void initState() {
-    super.initState();
-    // Start the timer when the widget is initialized
-    _timer = Timer.periodic(const Duration(seconds: 5), (Timer timer) {
+  // Function to handle refresh button press
+  void handleRefresh() {
+    // Set _isLoading to true when refresh button is pressed
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Simulating data fetching using Timer
+    Timer(Duration(seconds: 2), () {
+      // After data fetching is completed, set _isLoading back to false
       setState(() {
-        // Your refresh logic here
-        // updateData();
+        _isLoading = false;
       });
     });
-  }
-
-  @override
-  void dispose() {
-    // Dispose the timer when the widget is disposed to prevent memory leaks
-    _timer.cancel();
-    super.dispose();
   }
 
   @override
@@ -72,6 +67,20 @@ class _OrderTrackerState extends State<OrderTracker> {
             );
           },
         ),
+        // Conditionally display refresh button or circular progress indicator
+        actions: [
+          _isLoading
+              ? Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : IconButton(
+                  icon: Icon(Icons.refresh, color: Colors.white),
+                  onPressed: handleRefresh,
+                ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10.0),
@@ -80,27 +89,17 @@ class _OrderTrackerState extends State<OrderTracker> {
           children: [
             // START COOKING CARDS
             Expanded(
-              child: SingleChildScrollView(
-                child: OrderDetailsCard(
-                  cardWidth: MediaQuery.of(context).size.width,
-                ),
-              ),
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : SingleChildScrollView(
+                      child: OrderDetailsCard(
+                        cardWidth: MediaQuery.of(context).size.width,
+                      ),
+                    ),
             ),
             // END COOKING CARDS
-            // Text(
-            //   'Crafted for you by',
-            //   style: GoogleFonts.outfit(
-            //     color: Colors.grey,
-            //     fontSize: 14,
-            //   ),
-            //   textAlign: TextAlign.center,
-            // ),
-            // const SizedBox(height: 10), // Add some space between text and image
-            // Image.asset(
-            //   'assets/logo2.png', // Replace with the path to your logo image
-            //   width: 30, // Adjust the width as needed
-            //   height: 30, // Adjust the height as needed
-            // ),
           ],
         ),
       ),
