@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OrderHistoryScreenCanteen extends StatefulWidget {
   const OrderHistoryScreenCanteen({super.key});
@@ -34,31 +35,45 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                 Text(
                   'Order Details',
-                  style: TextStyle(
+                  style: GoogleFonts.outfit(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 10.0),
                 Text(
-                  'Order Number: ${order['orderNumber']}',
-                  style: const TextStyle(
+                  'Name: ${order['userName']}',
+                  style:  GoogleFonts.outfit(
+                    fontSize: 16.0,
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Text(
+                  'Order No. ${order['orderNumber']}',
+                  style:  GoogleFonts.outfit(
+                    fontSize: 16.0,
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Text(
+                  'Date-Time \n${order['orderTime']}',
+                  style:  GoogleFonts.outfit(
                     fontSize: 16.0,
                   ),
                 ),
                 const SizedBox(height: 10.0),
                 Text(
                   'Total Price: Rs. ${order['totalPrice']}',
-                  style: const TextStyle(
+                  style:  GoogleFonts.outfit(
                     fontSize: 16.0,
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                const Text(
+                 Text(
                   'Accept Status:',
-                  style: TextStyle(
+                  style: GoogleFonts.outfit(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -66,7 +81,7 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
                 const SizedBox(height: 10.0),
                 Text(
                   '${order['accept?'] == 'accept' ? 'Accept' : 'Reject'}',
-                  style: TextStyle(
+                  style: GoogleFonts.outfit(
                     fontSize: 16.0,
                     color: order['accept?'] == 'accept'
                         ? Colors.green
@@ -84,9 +99,9 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                       Text(
                         'Cart Items:',
-                        style: TextStyle(
+                        style: GoogleFonts.outfit(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -101,11 +116,11 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
                             return ListTile(
                               title: Text(
                                 order['cartItems'][index]['name'],
-                                style: const TextStyle(color: Colors.white),
+                                style:  GoogleFonts.outfit(color: Colors.white),
                               ),
                               subtitle: Text(
                                 'Quantity: ${order['cartItems'][index]['count']}',
-                                style: const TextStyle(color: Colors.white),
+                                style:  GoogleFonts.outfit(color: Colors.white),
                               ),
                             );
                           },
@@ -179,15 +194,15 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
                     children: [
                       Text(
                         '${fetchedOrders.length}',
-                        style: const TextStyle(
+                        style:  GoogleFonts.outfit(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
                       ),
-                      const Text(
+                       Text(
                         'History',
-                        style: TextStyle(
+                        style: GoogleFonts.outfit(
                           color: Colors.white,
                           fontSize: 9,
                           fontWeight: FontWeight.w600,
@@ -198,11 +213,11 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
                   ),
                 ),
                 const SizedBox(width: 40.0),
-                const Expanded(
+                 Expanded(
                   child: Center(
                     child: Text(
                       '',
-                      style: TextStyle(
+                      style: GoogleFonts.outfit(
                         color: Color(0xFF919191),
                         fontSize: 18.0,
                         fontWeight: FontWeight.w500,
@@ -265,16 +280,16 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
                             children: [
                               Text(
                                 'Order No. #${fetchedOrders[index]['orderNumber']}',
-                                style: const TextStyle(
+                                style:  GoogleFonts.outfit(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF6552FE),
+                                  color: const Color(0xFF6552FE),
                                 ),
                               ),
                               const SizedBox(height: 10.0),
                               Text(
                                 'Price: Rs. ${fetchedOrders[index]['totalPrice']}',
-                                style: const TextStyle(
+                                style:  GoogleFonts.outfit(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -282,7 +297,7 @@ class _OrderHistoryScreenCanteenState extends State<OrderHistoryScreenCanteen> {
                               const SizedBox(height: 20.0),
                               Text(
                                 '${fetchedOrders[index]['accept?'] == 'accept' ? 'Accept' : 'Reject'}',
-                                style: TextStyle(
+                                style: GoogleFonts.outfit(
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.bold,
                                   color: fetchedOrders[index]['accept?'] ==

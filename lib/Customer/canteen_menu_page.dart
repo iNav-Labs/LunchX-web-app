@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
+import 'package:slide_to_act/slide_to_act.dart';
 import 'package:lunchx_order/Customer/item_count.dart';
 import 'package:lunchx_order/Customer/oder_billing.dart';
 
@@ -24,6 +24,7 @@ class _CanteenMenuPageState extends State<CanteenMenuPage> {
   Map<String, int> itemCountMap = {};
   Map<String, int> localItemCountMap = {}; // Track local changes
   List<Map<String, dynamic>> order = [];
+  bool isVisible = false;
 
   @override
   void initState() {
@@ -480,114 +481,169 @@ Widget build(BuildContext context) {
 
           // Footer
 
-          Container(
-            height: MediaQuery.of(context).size.width * 0.2,
-            padding: const EdgeInsets.symmetric(
-                horizontal: 20.0), // Adjust horizontal padding
-            decoration: BoxDecoration(
-              color: const Color(0xFF6552FE),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+    // Container(
+    //         height: MediaQuery.of(context).size.width * 0.2,
+    //         padding: const EdgeInsets.symmetric(
+    //             horizontal: 20.0), // Adjust horizontal padding
+    //         decoration: BoxDecoration(
+    //           color: const Color(0xFF6552FE),
+    //           borderRadius: const BorderRadius.only(
+    //             topLeft: Radius.circular(20),
+    //             topRight: Radius.circular(20),
+    //           ),
+    //           boxShadow: [
+    //             BoxShadow(
+    //               color: const Color.fromARGB(255, 49, 49, 49).withOpacity(0.5),
+    //               spreadRadius: 7,
+    //               blurRadius: 10,
+    //               offset: const Offset(0, 3),
+    //             ),
+    //           ],
+    //         ),
+    //         child: Row(
+    //           children: [
+    //             Container(
+    //               margin: const EdgeInsets.only(left: 10), // Adjust left margin
+    //               child: Row(
+    //                 mainAxisSize:
+    //                     MainAxisSize.min, // Set main axis size to minimum
+    //                 children: [
+    //                   // Arrow forward icon
+    //                   const Icon(
+    //                     Icons.arrow_forward,
+    //                     color: Colors.white,
+    //                     size: 24.0,
+    //                   ),
+    //                   // const SizedBox(
+    //                   //   width: 20,
+    //                   // ), // Add some space between the icon and text
+
+    //                   // Text widget
+    //                   itemCountMap.isEmpty ||
+    //                           itemCountMap.values.every((count) => count == 0)
+    //                       ? Text(
+    //                           'Cart is Hungry!',
+    //                           style: GoogleFonts.outfit(
+    //                             color: Colors.white,
+    //                             fontSize:
+    //                                 MediaQuery.of(context).size.width * 0.045,
+    //                             fontWeight: FontWeight.bold,
+    //                           ),
+    //                         )
+    //                       : Text(
+    //                           'Proceed to Billing',
+    //                           style: GoogleFonts.outfit(
+    //                             color: Colors.white,
+    //                             fontSize:
+    //                                 MediaQuery.of(context).size.width * 0.045,
+    //                             fontWeight: FontWeight.bold,
+    //                           ),
+    //                         ),
+    //                 ],
+    //               ),
+    //             ),
+
+    //             const Spacer(), // Added Spacer to occupy remaining space
+    //             GestureDetector(
+    //               onTap: () {
+    //                 if (itemCountMap.isNotEmpty &&
+    //                     itemCountMap.values.any((count) => count > 0)) {
+    //                   Navigator.push(
+    //                     context,
+    //                     MaterialPageRoute(
+    //                       builder: (context) => const OrderBillingScreen(),
+    //                     ),
+    //                   );
+    //                 } else {
+    //                   // Handle case when count is not greater than 0
+    //                   // For example, you can show a snackbar or display a message to the user
+    //                   ScaffoldMessenger.of(context).showSnackBar(
+    //                     SnackBar(
+    //                       backgroundColor: Colors.red,
+    //                       content: Text(
+    //                         'No items added to cart!',
+    //                         style: GoogleFonts.outfit(
+    //                           fontWeight: FontWeight.bold,
+    //                         ),
+    //                       ),
+    //                     ),
+    //                   );
+    //                 }
+    //               },
+    //               child: Container(
+    //                 padding: const EdgeInsets.all(20), // Adjust padding
+    //                 decoration: const BoxDecoration(
+    //                   color: Color.fromARGB(255, 255, 255, 255),
+    //                   borderRadius: BorderRadius.only(
+    //                     topLeft: Radius.circular(20),
+    //                     topRight: Radius.circular(20),
+    //                   ),
+    //                 ),
+    //                 child: Image.asset(
+    //                   'assets/cart.gif', // Replace with the path to your logo image
+    //                   width: 45, // Adjust the width as needed
+    //                   height: 45, // Adjust the height as needed
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+
+   itemCountMap.isNotEmpty && itemCountMap.values.any((count) => count > 0)
+    ? Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        height: MediaQuery.of(context).size.width * 0.15, // Adjusted height
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent, // Make Scaffold transparent
+          body: Center(
+            child: GestureDetector(
+              onTap: () {
+                // Handle tap event here
+                // This is now empty as we've moved the action to onSubmit
+              },
+              child: SlideAction(
+                onSubmit: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const OrderBillingScreen(),
+                    ),
+                  );
+                  return null;
+                },
+                innerColor: Colors.white, // Colors Inside
+                outerColor: const Color(0xFF6552FE), // Track and submitted Color
+                elevation: 2,
+                borderRadius: 50, // Adjusted radius
+                height: 60, // Adjusted height
+                 sliderButtonIconSize: 10,
+                    sliderButtonYOffset: -5,
+                    sliderButtonIcon: const Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF6552FE),size: 20,),
+                    sliderRotate: false,
+                alignment: Alignment.center,
+                child: 
+                    Text(
+                        'Slide to satisfy hunger!',
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+textAlign: TextAlign.center,
+                      ),
+                 
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(255, 49, 49, 49).withOpacity(0.5),
-                  spreadRadius: 7,
-                  blurRadius: 10,
-                  offset: const Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 10), // Adjust left margin
-                  child: Row(
-                    mainAxisSize:
-                        MainAxisSize.min, // Set main axis size to minimum
-                    children: [
-                      // Arrow forward icon
-                      const Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                        size: 24.0,
-                      ),
-                      // const SizedBox(
-                      //   width: 20,
-                      // ), // Add some space between the icon and text
-
-                      // Text widget
-                      itemCountMap.isEmpty ||
-                              itemCountMap.values.every((count) => count == 0)
-                          ? Text(
-                              'Cart is Hungry!',
-                              style: GoogleFonts.outfit(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.045,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            )
-                          : Text(
-                              'Proceed to Billing',
-                              style: GoogleFonts.outfit(
-                                color: Colors.white,
-                                fontSize:
-                                    MediaQuery.of(context).size.width * 0.045,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                    ],
-                  ),
-                ),
-
-                const Spacer(), // Added Spacer to occupy remaining space
-                GestureDetector(
-                  onTap: () {
-                    if (itemCountMap.isNotEmpty &&
-                        itemCountMap.values.any((count) => count > 0)) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const OrderBillingScreen(),
-                        ),
-                      );
-                    } else {
-                      // Handle case when count is not greater than 0
-                      // For example, you can show a snackbar or display a message to the user
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(
-                            'No items added to cart!',
-                            style: GoogleFonts.outfit(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(20), // Adjust padding
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Image.asset(
-                      'assets/cart.gif', // Replace with the path to your logo image
-                      width: 45, // Adjust the width as needed
-                      height: 45, // Adjust the height as needed
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
+        ),
+      )
+    : const SizedBox(),
+
         ],
       ),
     ),

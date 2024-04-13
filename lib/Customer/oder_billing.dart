@@ -1,10 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api, avoid_print, dead_code, unused_local_variable, use_build_context_synchronously, sized_box_for_whitespace
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:lunchx_order/Customer/payment_done.dart';
+import 'package:lunchx_order/Customer/razorpay_payment.dart';
 
 class OrderBillingScreen extends StatefulWidget {
   const OrderBillingScreen({super.key});
@@ -18,12 +21,17 @@ class _OrderBillingScreenState extends State<OrderBillingScreen> {
   late User _currentUser;
   bool isDineSelected = true; // Initial selection is DINE
   bool isLoading = false;
+  late ConfettiController _confettiController;
+  Size minimumSize = const Size(10, 5);
+  Size maximumSize = const Size(20,10);
+
 
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
     fetchOrderData();
+    _confettiController = ConfettiController(duration: const Duration(milliseconds: 400));
   }
 
   double calculateTotalPrice(List<Map<String, dynamic>> order) {
@@ -225,6 +233,7 @@ Future<String?> getCanteenOwnerEmail(String canteenName) async {
     print(user);
     String? userEmail = user?.email;
     print('email: ${userEmail}');
+   
     setState(() {
       isLoading = true;
     });
@@ -254,18 +263,23 @@ Future<String?> getCanteenOwnerEmail(String canteenName) async {
               'price': order[i]['price'],
             });
           }
+          DateTime now = DateTime.now();
+String formattedDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(now);
+          double totalOrderAmount =
+          calculateTotalPrice(order) + calculateParcelCost(order);
 
           // Set the order details
           Map<String, dynamic> orderDetails = {
             'orderNumber': orderNumber,
             'userName': userName,
             'cartItems': cartItemsList,
-            'totalPrice': calculateTotalPrice(order),
+            'totalPrice': totalOrderAmount,
             'accept?': 'pending',
             'cooking': true,
             'dispatch': false,
             'ready': false,
             'email': userEmail,
+            'orderTime': formattedDateTime,
           };
 
           // Store order details in the "canteen_orders_queue" collection in Firestore
@@ -332,11 +346,17 @@ Future<String?> getCanteenOwnerEmail(String canteenName) async {
             }
           });
 
-          // Navigate to the payment success screen or any other screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PaymentSuccess()),
-          );
+          // Navigate to the RazorPayPage screen 
+         Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RazorPayPage(
+            orderAmount: totalOrderAmount,
+            onPaymentSuccess: () {},
+            onPaymentFail: () {},
+          ),
+        ),
+      );
         } catch (e) {
           // Handle any errors that occur
           print("Error confirming order: $e");
@@ -710,61 +730,82 @@ Future<String?> getCanteenOwnerEmail(String canteenName) async {
                           ],
                         ),
                         const SizedBox(height: 20.0),
-                        GestureDetector(
-                          onTap: () {
-                            confirmOrder(context);
-                          },
-                          child: Center(
-                            child: Container(
-                              height: 40.0,
-                              width: screenWidth * 0.5,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF6552FE),
-                                borderRadius: BorderRadius.circular(20.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: SizedBox(
-                                  height: 40.0,
-                                  child: Stack(
-                                    children: [
-                                      isLoading
-                                          ? const Center(
-                                              child: 
- SizedBox(
-    width: 20,
-    height: 20,
-    child: CircularProgressIndicator(
-      valueColor: AlwaysStoppedAnimation<Color>(Colors.white), // Set the color to white
-    ),
-  ),
-
-                                            )
-                                          : Center(
-                                              child: Text(
-                                                'Confirm Order',
-                                                style: GoogleFonts.outfit(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                      
+                   GestureDetector(
+      onTap: () {
+        _confettiController.play();
+        confirmOrder(context);
+      },
+      child: Center(
+        child: Container(
+          height: 40.0,
+          width: screenWidth * 0.5,
+          decoration: BoxDecoration(
+            color: const Color(0xFF6552FE),
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Center(
+            child: SizedBox(
+              height: 40.0,
+              child: Stack(
+                children: [
+                  isLoading
+                      ? const Center(
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           ),
+                        )
+                      :  Center(
+                          child: Text(
+                            'Confirm Order',
+                            style: GoogleFonts.outfit(
+                              color: Colors.white,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
+                  Align(
+  alignment: Alignment.center,
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    child: ConfettiWidget(
+      confettiController: _confettiController,
+      blastDirectionality: BlastDirectionality.explosive,
+      shouldLoop: false,
+      maxBlastForce: 8,
+      minBlastForce: 4,
+      blastDirection: -3.14 / 4,
+      emissionFrequency: 0.08,
+      numberOfParticles: 20,
+      gravity: 0.1,
+      particleDrag: 0.05, // Adjust particle drag for smaller particles
+      minimumSize: minimumSize,
+      maximumSize: maximumSize,
+    ),
+  ),
+),
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
                       ],
                     ),
                   ),

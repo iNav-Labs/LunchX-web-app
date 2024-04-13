@@ -205,6 +205,8 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               const SizedBox(height: 16.0),
+
+              
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -251,6 +253,8 @@ class _SignUpState extends State<SignUp> {
 
                 ],
               ),
+               
+                    
               const SizedBox(height: 30.0),
             Image.asset(
   'assets/bowl.jpeg',
@@ -258,6 +262,7 @@ class _SignUpState extends State<SignUp> {
   height: MediaQuery.of(context).size.height / 4, // Adjust the fraction as needed
   width:  MediaQuery.of(context).size.width /2, // Adjust the fraction as needed
 ),
+
             ],
           ),
         ),
@@ -338,3 +343,11 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
+
+
+
+
+
+
+
+

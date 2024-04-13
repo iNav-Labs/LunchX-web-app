@@ -88,52 +88,61 @@ class _LoginState extends State<Login> {
 
 
                 const SizedBox(height: 40.0),
-                Container(
-                  height: 45,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(width: 2, color: Colors.black),
-                  ),
-                  child: TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter Your Registered Email ID',
-                      border: InputBorder.none,
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                  ),
+Container(
+                height: 45,
+                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 1),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(width: 2, color: Colors.black),
                 ),
+                child: TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle:
+                        GoogleFonts.outfit(color: Colors.grey, fontSize: 14.0),
+                    border: InputBorder.none,
+                    floatingLabelBehavior: FloatingLabelBehavior.never, // Remove label text on tap
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+              ),
+
+
                 const SizedBox(height: 16.0),
                 Container(
-                  height: 45,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(width: 2, color: Colors.black),
-                  ),
-                  child: TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Enter Your Password',
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                        child: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-                      ),
-                      border: InputBorder.none,
-                    ),
-                    obscureText: _obscurePassword,
-                  ),
+                height: 45,
+                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 1),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(width: 2, color: Colors.black),
                 ),
-                const SizedBox(height: 30.0),
+                child: TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    labelText: 'Your Password',
+                    labelStyle:
+                        GoogleFonts.outfit(color: Colors.grey, fontSize: 14.0),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                      child: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                    ),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    floatingLabelBehavior: FloatingLabelBehavior.never, // Remove label text on tap
+                  ),
+                  obscureText: _obscurePassword,
+                ),
+              ),
+                      const SizedBox(height: 30.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

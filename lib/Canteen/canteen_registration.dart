@@ -21,6 +21,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
   final TextEditingController _chefs = TextEditingController();
 
   Uint8List? _imageBytes;
+  bool _isLoading = false; // Track loading state
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
   Widget _buildImageWidget() {
     if (_imageBytes != null) {
       return Image.memory(
-        _imageBytes!, // Use _imageBytes instead of File
+        _imageBytes!,
         fit: BoxFit.cover,
         height: 150.0,
         width: double.infinity,
@@ -66,7 +67,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
     return _imageBytes != null &&
         _nameController.text.isNotEmpty &&
         _canteenNameController.text.isNotEmpty &&
-        _phoneController.text.isNotEmpty;
+        _phoneController.text.isNotEmpty &&
         _chefs.text.isNotEmpty;
   }
 
@@ -103,6 +104,10 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
 
   Future<void> _registerCanteen() async {
     try {
+      setState(() {
+        _isLoading = true; // Set loading state to true
+      });
+
       final String? userEmail = FirebaseAuth.instance.currentUser?.email;
       if (userEmail != null) {
         print('Starting canteen registration process...');
@@ -110,7 +115,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
         // Upload image to Firebase Storage
         Reference storageRef = FirebaseStorage.instance.ref('canteen_image/${_nameController.text}');
         SettableMetadata metadata = SettableMetadata(
-          contentType: 'image/jpeg', // Set the content type of the image
+          contentType: 'image/jpeg',
         );
 
         print('Uploading image to Firebase Storage...');
@@ -139,6 +144,7 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
         print('Canteen registration completed successfully!');
 
         setState(() {
+          _isLoading = false;
           _imageBytes = null;
           _nameController.clear();
           _canteenNameController.clear();
@@ -150,6 +156,9 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
       }
     } catch (e) {
       print('Error occurred during canteen registration: $e');
+      setState(() {
+        _isLoading = false; // Set loading state to false
+      });
       _showAlertDialog(false);
     }
   }
@@ -217,14 +226,16 @@ class _CanteenRegistrationState extends State<CanteenRegistration> {
               ),
               const SizedBox(height: 30.0),
               ElevatedButton(
-                onPressed: () {
+                onPressed: _isLoading ? null : () {
                   if (_validateFields()) {
                     _registerCanteen();
                   } else {
                     _showAlertDialog(false);
                   }
                 },
-                child: const Text('Register'),
+                child: _isLoading
+                    ? CircularProgressIndicator() // Show loader when loading
+                    : const Text('Register'),
               ),
             ],
           ),

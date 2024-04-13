@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lunchx_order/Customer/refund_page.dart';
 
 class OrderDetailsCard extends StatelessWidget {
   final double cardWidth;
@@ -74,6 +75,7 @@ class OrderDetailsCard extends StatelessWidget {
   }
 
   Widget buildOrderAcceptButton(
+    BuildContext context,
       String acceptStatus, int orderNumber, String user_email) {
     return Visibility(
       visible: acceptStatus == 'reject',
@@ -90,8 +92,18 @@ class OrderDetailsCard extends StatelessWidget {
                 vertical: 5, // Adjust the padding as needed
               ),
             ),
-            onPressed: () {
-              refundOrder(user_email, orderNumber);
+           onPressed: () {
+              refundOrder(user_email, orderNumber).then((_) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const RefundProcessingScreen(),
+                  ),
+                );
+              }).catchError((error) {
+                // Handle error if refund fails
+                // print('Error processing refund: $error');
+              });
             },
             child: Text(
               'Refund',
@@ -145,6 +157,10 @@ class OrderDetailsCard extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
+                        border: Border.all(
+      color:  Colors.black, // Set border color to black
+      width: 3.0, // Set border width to 2px
+    ),
                         color: Colors
                             .white, // Set the background color to pure white
                       ),
@@ -179,6 +195,7 @@ class OrderDetailsCard extends StatelessWidget {
                               ],
                             ),
                           ),
+                          
                           const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -265,6 +282,51 @@ class OrderDetailsCard extends StatelessWidget {
                               ),
                             ],
                           ),
+                           const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: cardWidth / 2 +
+                                    10, // Half of the card's width
+                                height: 35.0,
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 1.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'Date \nTime',
+                                      style: GoogleFonts.outfit(
+                                        color: Colors.black,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: cardWidth / 3 - 20,
+                                decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${order['orderTime']}',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.outfit(
+                                      color:  Colors.black,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10.0), // Add some spacing
+                            ],
+                          ),
+                             const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -394,7 +456,7 @@ class OrderDetailsCard extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 10), // Adjust as needed
-                          buildOrderAcceptButton(order['accept?'],
+                          buildOrderAcceptButton(context,order['accept?'],
                               order['orderNumber'], order['email']),
 
                           const SizedBox(
@@ -406,10 +468,12 @@ class OrderDetailsCard extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  
                                   Container(
-                                    width: 146,
-                                    height: 146,
+                                    width: 140,
+                                    height: 140,
                                     margin: const EdgeInsets.only(right: 7),
+                                   
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15),
                                       color: order['ready']
@@ -420,6 +484,7 @@ class OrderDetailsCard extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+                                           const SizedBox(height: 10),
                                         Text(
                                           'Order Status',
                                           style: GoogleFonts.outfit(
@@ -427,15 +492,15 @@ class OrderDetailsCard extends StatelessWidget {
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        const SizedBox(height: 20),
+                                        const SizedBox(height: 10),
                                         Image.asset(
                                           'assets/pizza.gif', // Replace with the path to your logo image
                                           width:
-                                              70, // Adjust the width as needed
+                                              60, // Adjust the width as needed
                                           height:
-                                              70, // Adjust the height as needed
+                                              60, // Adjust the height as needed
                                         ),
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 5),
                                         Text(
                                           order['ready'] ? 'Ready' : 'Cooking',
                                           style: GoogleFonts.outfit(
@@ -444,12 +509,13 @@ class OrderDetailsCard extends StatelessWidget {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
+                                        const SizedBox(height: 5),
                                       ],
                                     ),
                                   ),
                                   Container(
-                                    width: 146,
-                                    height: 146,
+                                    width: 140,
+                                    height: 140,
                                     margin: const EdgeInsets.only(left: 7),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(15),
@@ -459,6 +525,7 @@ class OrderDetailsCard extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
+                                         const SizedBox(height: 10),
                                         Text(
                                           'Expected Time',
                                           style: GoogleFonts.outfit(
@@ -466,15 +533,15 @@ class OrderDetailsCard extends StatelessWidget {
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        const SizedBox(height: 20),
+                                        const SizedBox(height: 10),
                                         Image.asset(
                                           'assets/alarm.gif', // Replace with the path to your logo image
                                           width:
-                                              70, // Adjust the width as needed
+                                              60, // Adjust the width as needed
                                           height:
-                                              70, // Adjust the height as needed
+                                              60, // Adjust the height as needed
                                         ),
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 5),
                                         Text(
                                           order['cooking']
                                               ? "${order['ETP']} mins"
@@ -485,6 +552,7 @@ class OrderDetailsCard extends StatelessWidget {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
+                                         const SizedBox(height: 5),
                                       ],
                                     ),
                                   ),

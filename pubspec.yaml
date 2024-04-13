@@ -47,6 +47,12 @@ dependencies:
   image_picker_web: ^3.1.1
   mime_type: ^1.0.0
   path_provider: ^2.1.2
+  url_launcher: ^6.0.0
+  slide_to_act: ^2.0.2
+  confetti: ^0.7.0
+  intl: ^0.19.0
+  razorpay_web: ^1.4.2
+  fluttertoast: ^8.2.4
   
 dev_dependencies:
   flutter_test:
@@ -98,6 +104,8 @@ flutter:
     - assets/clock_purple.jpeg
     - assets/art.png
     - assets/group.png
+    - assets/refund.gif
+    - assets/fail.gif
 
   # To add assets to your application, add an assets section, like this:
   # assets:

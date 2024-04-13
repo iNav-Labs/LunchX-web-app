@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key});
@@ -27,7 +28,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
       builder: (BuildContext context) {
         return SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -40,14 +41,28 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 ),
                 const SizedBox(height: 10.0),
                 Text(
-                  '${order['cartItems'][0]['canteen']}',
+                  'Canteen : ${order['cartItems'][0]['canteen']}',
                   style: const TextStyle(
                     fontSize: 16.0,
                   ),
                 ),
                 const SizedBox(height: 10.0),
                 Text(
-                  'Order Number: ${order['orderNumber']}',
+                  'Order No.  ${order['orderNumber']}',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+                 const SizedBox(height: 10.0),
+                Text(
+                  'Name: ${order['orderTime']}',
+                  style:  GoogleFonts.outfit(
+                    fontSize: 16.0,
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Text(
+                  'Name: ${order['userName']}',
                   style: const TextStyle(
                     fontSize: 16.0,
                   ),
@@ -255,6 +270,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12.0),
+                            border: Border.all(
+      color: Colors.black, // Set border color to black
+      width: 2.0, // Set border width to 2px
+    ),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.3),

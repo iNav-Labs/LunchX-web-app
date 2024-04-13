@@ -6,7 +6,7 @@ import 'package:lunchx_order/Customer/oder_tracking_details.dart';
 import 'package:lunchx_order/Customer/student_dashboard.dart';
 
 class OrderTracker extends StatefulWidget {
-  const OrderTracker({Key? key}) : super(key: key);
+  const OrderTracker({super.key});
 
   @override
   _OrderTrackerState createState() => _OrderTrackerState();
@@ -23,7 +23,7 @@ class _OrderTrackerState extends State<OrderTracker> {
     });
 
     // Simulating data fetching using Timer
-    Timer(Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 2), () {
       // After data fetching is completed, set _isLoading back to false
       setState(() {
         _isLoading = false;
@@ -70,14 +70,14 @@ class _OrderTrackerState extends State<OrderTracker> {
         // Conditionally display refresh button or circular progress indicator
         actions: [
           _isLoading
-              ? Padding(
-                  padding: const EdgeInsets.all(12.0),
+              ? const Padding(
+                  padding: EdgeInsets.all(12.0),
                   child: CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
                 )
               : IconButton(
-                  icon: Icon(Icons.refresh, color: Colors.white),
+                  icon: const Icon(Icons.refresh, color: Colors.white),
                   onPressed: handleRefresh,
                 ),
         ],
@@ -90,7 +90,7 @@ class _OrderTrackerState extends State<OrderTracker> {
             // START COOKING CARDS
             Expanded(
               child: _isLoading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : SingleChildScrollView(

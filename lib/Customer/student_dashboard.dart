@@ -256,8 +256,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
                     'assets/notify.gif',
-                    width: 30,
-                    height: 30,
+                    width: 25,
+                    height: 25,
                   ),
                 ),
               ),

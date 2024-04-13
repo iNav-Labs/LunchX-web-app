@@ -18,6 +18,7 @@ class _LoginState extends State<CanteenLogin> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _obscurePassword = true;
+  bool _isLoading = false; // Track loading state
 
   @override
   Widget build(BuildContext context) {
@@ -84,15 +85,18 @@ class _LoginState extends State<CanteenLogin> {
                     ),
                     FloatingActionButton.small(
                       backgroundColor: Colors.black,
-                      onPressed: () {
-                        _loginUser(context);
-                      },
+                      onPressed: _isLoading ? null : () => _loginUser(context), // Disable button when loading
                       shape: const StadiumBorder(),
-                      child: const Icon(
-                        Icons.arrow_right_alt_rounded,
-                        size: 40,
-                        color: Colors.white,
-                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            strokeWidth: 3,
+                          ) // Show loader when loading
+                          : const Icon(
+                              Icons.arrow_right_alt_rounded,
+                              size: 40,
+                              color: Colors.white,
+                            ),
                     ),
                   ],
                 ),
@@ -106,7 +110,6 @@ class _LoginState extends State<CanteenLogin> {
                     width: double.infinity,
                   ),
                 ),
-                
               ],
             ),
           ),
@@ -116,6 +119,9 @@ class _LoginState extends State<CanteenLogin> {
   }
 
   void _loginUser(BuildContext context) async {
+    setState(() {
+      _isLoading = true; // Set loading state to true
+    });
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text,
@@ -129,6 +135,10 @@ class _LoginState extends State<CanteenLogin> {
     } catch (e) {
       // If login fails, show alert
       _showErrorDialog(context, e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false; // Set loading state to false
+      });
     }
   }
 

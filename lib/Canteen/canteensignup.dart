@@ -19,6 +19,7 @@ class _CanteenSignUpState extends State<CanteenSignUp> {
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _obscurePassword = true;
+  bool _isLoading = false; // Track loading state
 
   @override
   Widget build(BuildContext context) {
@@ -85,15 +86,18 @@ class _CanteenSignUpState extends State<CanteenSignUp> {
                     ),
                     FloatingActionButton.small(
                       backgroundColor: Colors.black,
-                      onPressed: () {
-                        _registerWithEmailAndPassword(context);
-                      },
+                      onPressed: _isLoading ? null : () => _registerWithEmailAndPassword(context), // Disable button when loading
                       shape: const StadiumBorder(),
-                      child: const Icon(
-                        Icons.arrow_right_alt_rounded,
-                        size: 40,
-                        color: Colors.white,
-                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            strokeWidth: 3,
+                          ) // Show loader when loading
+                          : const Icon(
+                              Icons.arrow_right_alt_rounded,
+                              size: 40,
+                              color: Colors.white,
+                            ),
                     ),
                   ],
                 ),
@@ -107,7 +111,6 @@ class _CanteenSignUpState extends State<CanteenSignUp> {
                     width: double.infinity,
                   ),
                 ),
-               
               ],
             ),
           ),
@@ -117,6 +120,9 @@ class _CanteenSignUpState extends State<CanteenSignUp> {
   }
 
   void _registerWithEmailAndPassword(BuildContext context) async {
+    setState(() {
+      _isLoading = true; // Set loading state to true
+    });
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -127,6 +133,10 @@ class _CanteenSignUpState extends State<CanteenSignUp> {
       _showSignUpSuccessDialog(context);
     } catch (e) {
       _showErrorDialog(context, e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false; // Set loading state to false
+      });
     }
   }
 
