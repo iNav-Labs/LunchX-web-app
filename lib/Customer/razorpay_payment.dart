@@ -73,7 +73,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
       'key': 'rzp_test_3XYau8mY6BkJq6',
       'amount': amountInPaise,
       'name': 'LunchX',
-      'prefill': {'email': '${user!.email}'},
+      'prefill': { 'email': '${user!.email}'},
       'timeout': 90,
     };
     try {

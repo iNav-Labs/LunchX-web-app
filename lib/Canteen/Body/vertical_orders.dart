@@ -64,7 +64,9 @@ Future<double> calculateOrderPreparationTime(int numberOfChefs, List<Map<String,
       int A = numberOfOrders;
 
       if (A <= numberOfChefs) {
+        print('if');
         if (cartItems.length <= numberOfChefs) {
+          print('if');
           double maxPrepTime = cartItems.fold<double>(0, (prev, item) {
             var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
             return max(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
@@ -72,6 +74,7 @@ Future<double> calculateOrderPreparationTime(int numberOfChefs, List<Map<String,
           totalOrderPrepTime = maxPrepTime;
           A--;
         } else {
+          print('else');
           double maxPrepTime = cartItems.fold<double>(0, (prev, item) {
             var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
             return max(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
@@ -84,6 +87,7 @@ Future<double> calculateOrderPreparationTime(int numberOfChefs, List<Map<String,
           A--;
         }
       } else {
+        print('else');
         double maxPrepTime = cartItems.fold<double>(0, (prev, item) {
           var menuItem = menuItems.firstWhere((menu) => menu['name'] == item['name']);
           return max(prev, menuItem['timeofPreparation'] * (item['count'] / menuItem['batchSize']).ceil());
@@ -518,6 +522,7 @@ if (orderData.containsKey('cartItems')) {
 
                                               // Calculate the estimated order preparation time
                                               double etpOrder = await calculateOrderPreparationTime(numberOfChefs,menuItems, numberOfOrders, presentOrdersData, order['orderNumber']);
+                                              print('calculated time is = $etpOrder');
   
                                               // Add ETP (estimated time of preparation) to customer's profile
                                               // Add ETP (estimated time of preparation) and time to the customer's profile

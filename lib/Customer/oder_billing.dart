@@ -283,68 +283,68 @@ String formattedDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(now);
           };
 
           // Store order details in the "canteen_orders_queue" collection in Firestore
-          CollectionReference canteenOrdersRef = FirebaseFirestore.instance
-              .collection('LunchX')
-              .doc('customers')
-              .collection('canteen_orders_queue');
+//           CollectionReference canteenOrdersRef = FirebaseFirestore.instance
+//               .collection('LunchX')
+//               .doc('customers')
+//               .collection('canteen_orders_queue');
 
-          // Store order details in the "canteen_orders_queue" collection
-          await canteenOrdersRef.doc('Order #$orderNumber').set(orderDetails);
+//           // Store order details in the "canteen_orders_queue" collection
+//           await canteenOrdersRef.doc('Order #$orderNumber').set(orderDetails);
 
-          // Store order details in the "current_order" collection in Firestore for the user
-          CollectionReference currentUserOrdersRef = FirebaseFirestore.instance
-              .collection('LunchX')
-              .doc('customers')
-              .collection('users')
-              .doc(userEmail)
-              .collection('current_orders');
+//           // Store order details in the "current_order" collection in Firestore for the user
+//           CollectionReference currentUserOrdersRef = FirebaseFirestore.instance
+//               .collection('LunchX')
+//               .doc('customers')
+//               .collection('users')
+//               .doc(userEmail)
+//               .collection('current_orders');
 
-// Store order details in the "current_order" collection
-          await currentUserOrdersRef
-              .doc('Order #$orderNumber')
-              .set(orderDetails);
+// // Store order details in the "current_order" collection
+//           await currentUserOrdersRef
+//               .doc('Order #$orderNumber')
+//               .set(orderDetails);
 
-          // Send order details to canteen owner's folder based on canteen name
-          for (var cartItem in cartItemsList) {
-            print('canteen name is ${cartItem['canteen']}');
-            String? canteenOwnerEmail =
-                await getCanteenOwnerEmail(cartItem['canteen']);
+//           // Send order details to canteen owner's folder based on canteen name
+//           for (var cartItem in cartItemsList) {
+//             print('canteen name is ${cartItem['canteen']}');
+//             String? canteenOwnerEmail =
+//                 await getCanteenOwnerEmail(cartItem['canteen']);
 
-            print('canteen owner email $canteenOwnerEmail');
+//             print('canteen owner email $canteenOwnerEmail');
 
-            if (canteenOwnerEmail != null) {
-              try {
-                CollectionReference canteenOwnerOrdersRef = FirebaseFirestore
-                    .instance
-                    .collection('LunchX')
-                    .doc('canteens')
-                    .collection('users')
-                    .doc(canteenOwnerEmail)
-                    .collection('present_orders');
+//             if (canteenOwnerEmail != null) {
+//               try {
+//                 CollectionReference canteenOwnerOrdersRef = FirebaseFirestore
+//                     .instance
+//                     .collection('LunchX')
+//                     .doc('canteens')
+//                     .collection('users')
+//                     .doc(canteenOwnerEmail)
+//                     .collection('present_orders');
 
-                // Store order details in canteen owner's folder
-                await canteenOwnerOrdersRef
-                    .doc('Order #$orderNumber')
-                    .set(orderDetails);
-              } catch (e) {
-                print(
-                    "Error storing order details in canteen owner's folder: $e");
-              }
-            }
-          }
+//                 // Store order details in canteen owner's folder
+//                 await canteenOwnerOrdersRef
+//                     .doc('Order #$orderNumber')
+//                     .set(orderDetails);
+//               } catch (e) {
+//                 print(
+//                     "Error storing order details in canteen owner's folder: $e");
+//               }
+//             }
+//           }
           // Clear the cart collection after moving items to "Current Orders"
-          await FirebaseFirestore.instance
-              .collection('LunchX')
-              .doc('customers')
-              .collection('users')
-              .doc(userEmail)
-              .collection('cart')
-              .get()
-              .then((querySnapshot) {
-            for (QueryDocumentSnapshot doc in querySnapshot.docs) {
-              doc.reference.delete();
-            }
-          });
+          // await FirebaseFirestore.instance
+          //     .collection('LunchX')
+          //     .doc('customers')
+          //     .collection('users')
+          //     .doc(userEmail)
+          //     .collection('cart')
+          //     .get()
+          //     .then((querySnapshot) {
+          //   for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+          //     doc.reference.delete();
+          //   }
+          // });
 
           // Navigate to the RazorPayPage screen 
          Navigator.push(
