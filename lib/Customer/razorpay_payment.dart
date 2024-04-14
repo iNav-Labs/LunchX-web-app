@@ -114,9 +114,30 @@ class _RazorPayPageState extends State<RazorPayPage> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(), // Placeholder for loading indicator
+     body: Center(
+  child: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        'Payment page is loading...',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-    );
+      SizedBox(height: 20),
+      CircularProgressIndicator(), // Placeholder for loading indicator
+      SizedBox(height: 10),
+      Text(
+        'If this takes longer than usual, the payment will be canceled.\nPlease try placing the order again.',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 14,
+        ),
+      ),
+    ],
+  ),
+     ),
+     );
   }
 }
