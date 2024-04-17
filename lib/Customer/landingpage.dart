@@ -10,7 +10,7 @@ class LandingPage extends StatelessWidget {
   final String _privacyPolicyUrl =
       'https://www.termsfeed.com/live/43d036d6-de13-4777-a476-77aeb35d6ee3';
   final String _termsConditionsUrl = 'https://www.termsfeed.com/live/4e458585-425a-4b42-9d88-8e4c646fb40d';
-  final String _contactUsUrl = 'https://lunchx.web.app';
+  final String _contactUsUrl = 'https://form.jotform.com/241044893823459';
   final String _cancellationRefundUrl =
       'https://www.privacypolicies.com/live/b02cac83-5029-4469-bec7-af496322acb7';
 

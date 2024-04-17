@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AcceptedOrders extends StatefulWidget {
   const AcceptedOrders({super.key});
@@ -36,7 +37,13 @@ class _AcceptedOrdersState extends State<AcceptedOrders> {
       fetchOrderDetails(); // Your fetchOrderDetails function
     });
   }
-
+Future<void> _makePhoneCall(String phoneNumber) async {
+  if (await canLaunch(phoneNumber)) {
+    await launch(phoneNumber);
+  } else {
+    throw 'Could not launch $phoneNumber';
+  }
+}
   Future<void> markOrderAsReady(Map<String, dynamic> order) async {
     try {
       final batch = FirebaseFirestore.instance.batch();
@@ -358,11 +365,13 @@ class _AcceptedOrdersState extends State<AcceptedOrders> {
                                   child: const Text('Dispatch'),
                                 ),
                                 TextButton(
-                                  onPressed: () {
-                                    // Handle 'Call' button action
-                                  },
-                                  child: const Text('Call'),
-                                ),
+  onPressed: () {
+    print(order);
+    print(order['phoneNumber']);
+    _makePhoneCall('tel:+91 ${order['phoneNumber']}'); // Replace the phone number with the desired number
+  },
+  child: const Text('Call'),
+),
                               ],
                             );
                           },

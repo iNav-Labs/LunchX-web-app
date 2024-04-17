@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:lunchx_order/Customer/payment_done.dart';
 import 'package:lunchx_order/Customer/razorpay_payment.dart';
 
 class OrderBillingScreen extends StatefulWidget {

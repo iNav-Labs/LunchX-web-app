@@ -119,7 +119,7 @@ double calculateTotalPrice(List<Map<String, dynamic>> order) {
     }
     return parcelCost;
   }
-Future<String?> getUserNameFromEmail(String? userEmail) async {
+Future<Map<String, String>?> getUserDetailsFromEmail(String? userEmail) async {
   if (userEmail == null) return null;
 
   try {
@@ -132,15 +132,19 @@ Future<String?> getUserNameFromEmail(String? userEmail) async {
             .doc(userEmail) // Document with provided userEmail as its ID
             .get();
 
-    // If document exists, return the 'name' field
+    // If document exists, return the 'name' and 'phoneNumber' fields
     if (documentSnapshot.exists) {
-      return documentSnapshot.get('name') as String?;
+      String? name = documentSnapshot.get('name') as String?;
+      String? phoneNumber = documentSnapshot.get('phoneNumber') as String?;
+      
+      // Return a map containing both name and phoneNumber
+      return {'name': name ?? '', 'phoneNumber': phoneNumber ?? ''};
     }
   } catch (e) {
-    print("Error retrieving user's name: $e");
+    print("Error retrieving user details: $e");
   }
 
-  // Return null if user's name is not found
+  // Return null if user's details are not found
   return null;
 }
 Future<int> getLatestOrderNumber() async {
@@ -173,9 +177,9 @@ void confirmOrder(BuildContext context) async {
     print('email: ${userEmail}');
    
     if (userEmail != null) {
-      String? userName = await getUserNameFromEmail(userEmail);
+      Map<String, String>? userDetails = await getUserDetailsFromEmail(userEmail);
 
-      if (userName != null) {
+      if (userDetails != null) {
         try {
           // Get the latest order number from Firestore
           int latestOrderNumber = await getLatestOrderNumber();
@@ -205,7 +209,8 @@ String formattedDateTime = DateFormat('dd-MM-yyyy HH:mm:ss').format(now);
           // Set the order details
           Map<String, dynamic> orderDetails = {
             'orderNumber': orderNumber,
-            'userName': userName,
+            'userName': userDetails['name'],
+             'phoneNumber': userDetails['phoneNumber'], // Adding phoneNumber
             'cartItems': cartItemsList,
             'totalPrice': totalOrderAmount,
             'accept?': 'pending',

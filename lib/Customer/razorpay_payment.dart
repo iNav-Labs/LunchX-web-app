@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lunchx_order/Customer/payment_done.dart';
 import 'package:lunchx_order/Customer/payment_fail.dart';
 import 'package:razorpay_web/razorpay_web.dart';
@@ -70,7 +71,7 @@ class _RazorPayPageState extends State<RazorPayPage> {
   void openCheckout() async {
     int amountInPaise = (widget.orderAmount * 100).toInt();
     var options = {
-      'key': 'rzp_test_3XYau8mY6BkJq6',
+      'key': 'rzp_live_cidi0NYod0fPVv',
       'amount': amountInPaise,
       'name': 'LunchX',
       'prefill': { 'email': '${user!.email}'},
@@ -112,32 +113,55 @@ class _RazorPayPageState extends State<RazorPayPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-     body: Center(
-  child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text(
-        'Payment page is loading...',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text(
+            'Payment page is loading...',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 20),
+          const CircularProgressIndicator(), // Placeholder for loading indicator
+          const SizedBox(height: 10),
+          const Text(
+            'If this takes longer than usual, the payment will be canceled.\nPlease try placing the order again.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PaymentFail()),
+              );
+            },
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              foregroundColor: MaterialStateProperty.all(Colors.black),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  side: const BorderSide(color: Colors.black, width: 2),
+                ),
+              ),
+            ),
+            child: Text(
+              'Try Again !!',
+              style: GoogleFonts.outfit(),
+            ),
+          ),
+        ],
       ),
-      SizedBox(height: 20),
-      CircularProgressIndicator(), // Placeholder for loading indicator
-      SizedBox(height: 10),
-      Text(
-        'If this takes longer than usual, the payment will be canceled.\nPlease try placing the order again.',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 14,
-        ),
-      ),
-    ],
-  ),
-     ),
-     );
-  }
+    ),
+  );
+}
 }
